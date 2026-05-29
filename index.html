@@ -8,249 +8,565 @@
 <meta name="apple-mobile-web-app-title" content="DC Intel">
 <meta name="theme-color" content="#0a0a0f">
 <title>DC Intel</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#0a0a0f;
-  --surface:#13131a;
-  --surface2:#1c1c26;
-  --border:#2a2a38;
-  --accent:#e8ff47;
-  --accent2:#4dffb8;
-  --text:#f0f0f5;
-  --muted:#6b6b82;
-  --red:#ff4d6d;
-  --blue:#4d9fff;
-  --font-display:'Syne',sans-serif;
-  --font-mono:'DM Mono',monospace;
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --bg: #0a0a0f;
+  --card: #13131a;
+  --card2: #1c1c26;
+  --border: #2a2a38;
+  --accent: #e8ff47;
+  --green: #4dffb8;
+  --text: #f0f0f5;
+  --muted: #6b6b82;
+  --red: #ff4d6d;
+  --blue: #4d9fff;
+  --purple: #c084fc;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-display);overflow:hidden;font-size:15px}
-#app{display:flex;flex-direction:column;height:100vh;width:100%;max-width:430px;margin:0 auto;position:relative;background:var(--bg)}
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow: hidden;
+}
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  background: var(--bg);
+}
 
-.header{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
-.header-logo{font-size:20px;font-weight:700;letter-spacing:-0.5px;color:var(--text)}
-.header-logo span{color:var(--accent)}
-.header-right{display:flex;align-items:center;gap:10px}
-.header-tag{font-family:var(--font-mono);font-size:10px;color:var(--muted);border:1px solid var(--border);padding:3px 8px;border-radius:20px}
-.settings-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:2px 4px;line-height:1}
-.live-dot{width:6px;height:6px;background:var(--accent2);border-radius:50%;display:inline-block;margin-right:5px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+/* Header */
+.hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.logo { font-size: 18px; font-weight: 700; }
+.logo span { color: var(--accent); }
+.hdr-right { display: flex; align-items: center; gap: 8px; }
+.live-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.gear-btn {
+  background: none; border: none;
+  color: var(--muted); font-size: 16px;
+  cursor: pointer; padding: 2px;
+}
 
-.tabs{display:flex;background:var(--bg);border-bottom:1px solid var(--border);padding:0 20px}
-.tab{flex:1;padding:12px 0;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;text-align:center;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;font-family:var(--font-mono)}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tab {
+  flex: 1;
+  padding: 11px 0;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s;
+}
+.tab.on { color: var(--accent); border-bottom-color: var(--accent); }
 
-.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.content::-webkit-scrollbar{display:none}
-.page{display:none;padding-bottom:20px}
-.page.active{display:block}
+/* Pages */
+.pages { flex: 1; overflow: hidden; }
+.page { display: none; height: 100%; overflow-y: auto; padding: 14px 14px 30px; }
+.page::-webkit-scrollbar { display: none; }
+.page.on { display: block; }
 
-/* Settings overlay */
-.settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:none;align-items:flex-end;justify-content:center}
-.settings-overlay.open{display:flex}
-.settings-sheet{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;border-top:1px solid var(--border)}
-.settings-title{font-size:16px;font-weight:600;margin-bottom:6px}
-.settings-sub{font-size:12px;color:var(--muted);margin-bottom:20px;font-family:var(--font-mono);line-height:1.6}
-.settings-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-.settings-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);font-family:var(--font-mono);outline:none;margin-bottom:12px}
-.settings-input:focus{border-color:rgba(232,255,71,0.4)}
-.settings-save{width:100%;background:var(--accent);color:#0a0a0f;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;font-family:var(--font-display);cursor:pointer;margin-bottom:10px}
-.settings-cancel{width:100%;background:none;color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;font-family:var(--font-display);cursor:pointer}
-.key-status{font-family:var(--font-mono);font-size:11px;padding:6px 10px;border-radius:6px;margin-bottom:16px;display:none}
-.key-status.set{background:rgba(77,255,184,0.1);color:var(--accent2);display:block}
-.key-status.unset{background:rgba(255,77,109,0.1);color:var(--red);display:block}
+/* Feed header */
+.feed-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.feed-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.refresh {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
-.news-feed{padding:12px 14px 0}
-.feed-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.feed-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.refresh-btn{font-family:var(--font-mono);font-size:10px;color:var(--accent);cursor:pointer;background:none;border:none;padding:4px 0}
+/* News card — SIMPLE, no tricks */
+.nc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+.nc-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 7px;
+}
+.nc-src {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.nc-sep { color: var(--border); font-size: 9px; }
+.nc-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+}
+.nc-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+.tag-deal { background: rgba(232,255,71,0.12); color: var(--accent); }
+.tag-infra { background: rgba(77,255,184,0.12); color: var(--green); }
+.tag-power { background: rgba(255,77,109,0.12); color: var(--red); }
+.tag-policy { background: rgba(77,159,255,0.12); color: var(--blue); }
+.tag-market { background: rgba(192,132,252,0.12); color: var(--purple); }
 
-.news-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:9px;display:block;width:100%;overflow:hidden}
-.news-card:active{opacity:0.8}
-.news-card.tag-deal{border-left-color:var(--accent)}
-.news-card.tag-policy{border-left-color:var(--blue)}
-.news-card.tag-power{border-left-color:var(--red)}
-.news-card.tag-infra{border-left-color:var(--accent2)}
-.news-card.tag-market{border-left-color:#c084fc}
-
-.card-meta{display:flex;align-items:center;gap:5px;margin-bottom:5px;overflow:hidden;white-space:nowrap}
-.card-source{font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;overflow:hidden;text-overflow:ellipsis;max-width:90px;flex-shrink:1}
-.card-date{font-family:var(--font-mono);font-size:9px;color:var(--muted);flex-shrink:0}
-.card-dot{width:2px;height:2px;background:var(--muted);border-radius:50%;flex-shrink:0;opacity:0.5}
-.card-tag{font-family:var(--font-mono);font-size:9px;padding:1px 6px;border-radius:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
-.tag-deal .card-tag{background:rgba(232,255,71,0.15);color:var(--accent)}
-.tag-policy .card-tag{background:rgba(77,159,255,0.15);color:var(--blue)}
-.tag-power .card-tag{background:rgba(255,77,109,0.15);color:var(--red)}
-.tag-infra .card-tag{background:rgba(77,255,184,0.15);color:var(--accent2)}
-.tag-market .card-tag{background:rgba(192,132,252,0.15);color:#c084fc}
-
-.card-title{font-size:13px;font-weight:600;line-height:1.4;color:var(--text);margin-bottom:4px}
-.card-snippet{font-size:11px;line-height:1.5;color:var(--muted)}
-.card-link{font-family:var(--font-mono);font-size:9px;color:var(--accent);margin-top:5px;display:inline-block;text-decoration:none}
-
-.summarize-btn{display:flex;align-items:center;gap:5px;margin-top:8px;font-family:var(--font-mono);font-size:10px;color:var(--accent);background:rgba(232,255,71,0.06);border:1px solid rgba(232,255,71,0.15);border-radius:6px;padding:6px 10px;cursor:pointer;width:100%;justify-content:center;transition:all 0.2s}
-.summarize-btn:active{background:rgba(232,255,71,0.12)}
-.ai-summary{margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.6;color:var(--text);display:none}
-.ai-summary.visible{display:block}
-.ai-summary-label{font-family:var(--font-mono);font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-
-/* Deals */
-.deals-wrap{padding:12px 14px 0}
-.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.metric-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
-.metric-val{font-size:22px;font-weight:700;color:var(--text);font-family:var(--font-mono)}
-.metric-lbl{font-size:11px;color:var(--muted);margin-top:3px;font-family:var(--font-mono)}
-.metric-val.green{color:var(--accent2)}
-.metric-val.yellow{color:var(--accent)}
-
-.filter-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-.filter-row::-webkit-scrollbar{display:none}
-.filter-chip{font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);white-space:nowrap;cursor:pointer;transition:all 0.2s;flex-shrink:0}
-.filter-chip.active{background:rgba(232,255,71,0.1);border-color:var(--accent);color:var(--accent)}
-
-.deal-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
-.deal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
-.deal-buyer{font-size:14px;font-weight:600;color:var(--text);flex:1;padding-right:10px;line-height:1.35}
-.deal-val{font-family:var(--font-mono);font-size:14px;font-weight:500;color:var(--accent);white-space:nowrap}
-.deal-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
-.deal-counter{font-size:12px;color:var(--muted)}
-.deal-date{font-family:var(--font-mono);font-size:10px;color:var(--muted)}
-.deal-badge{font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
-.b-capex{background:rgba(77,159,255,0.12);color:var(--blue)}
-.b-compute{background:rgba(77,255,184,0.12);color:var(--accent2)}
-.b-acquisition{background:rgba(192,132,252,0.12);color:#c084fc}
-.b-jv{background:rgba(232,255,71,0.12);color:var(--accent)}
-.b-infra{background:rgba(255,77,109,0.12);color:var(--red)}
-.deal-detail{font-size:12px;color:var(--muted);line-height:1.55}
-
-/* Claude chat */
-.claude-wrap{padding:12px 14px 0;display:flex;flex-direction:column;height:calc(100vh - 115px)}
-.claude-msgs{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:12px}
-.claude-msgs::-webkit-scrollbar{display:none}
-.msg{margin-bottom:14px;max-width:88%}
-.msg.user{margin-left:auto}
-.msg.assistant{margin-right:auto}
-.msg-bubble{padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.65}
-.msg.user .msg-bubble{background:var(--accent);color:#0a0a0f;font-weight:500;border-radius:14px 14px 4px 14px}
-.msg.assistant .msg-bubble{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:14px 14px 14px 4px}
-.msg-time{font-family:var(--font-mono);font-size:9px;color:var(--muted);margin-top:4px;padding:0 4px}
-.msg.user .msg-time{text-align:right}
-
-.claude-input-row{display:flex;gap:10px;align-items:flex-end;padding-bottom:env(safe-area-inset-bottom,0px)}
-.claude-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--text);font-family:var(--font-display);resize:none;min-height:46px;max-height:120px;outline:none;transition:border 0.2s;line-height:1.5}
-.claude-input:focus{border-color:rgba(232,255,71,0.4)}
-.claude-input::placeholder{color:var(--muted)}
-.send-btn{width:46px;height:46px;background:var(--accent);border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
-.send-btn:active{transform:scale(0.93)}
-.send-btn svg{width:18px;height:18px;fill:#0a0a0f}
-
-.quick-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;margin-bottom:10px}
-.quick-chips::-webkit-scrollbar{display:none}
-.quick-chip{font-family:var(--font-mono);font-size:11px;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all 0.2s}
-.quick-chip:active{border-color:var(--accent);color:var(--accent)}
-
-.typing{display:flex;gap:4px;align-items:center;padding:12px 14px}
-.typing span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:blink 1.2s infinite}
-.typing span:nth-child(2){animation-delay:0.2s}
-.typing span:nth-child(3){animation-delay:0.4s}
-@keyframes blink{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
+.nc-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 5px;
+}
+.nc-snippet {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.nc-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.nc-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  text-decoration: none;
+}
+.nc-link:hover { text-decoration: underline; }
+.ai-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  background: rgba(232,255,71,0.07);
+  border: 1px solid rgba(232,255,71,0.2);
+  border-radius: 5px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: auto;
+}
+.ai-btn:active { background: rgba(232,255,71,0.15); }
+.ai-box {
+  display: none;
+  margin-top: 8px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.ai-box.on { display: block; }
+.ai-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
 
 /* Skeleton */
-.loading-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
-.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;height:12px;margin-bottom:8px}
-.skeleton.wide{width:85%}
-.skeleton.medium{width:60%}
-.skeleton.short{width:35%}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+.skel-line {
+  height: 10px;
+  border-radius: 5px;
+  margin-bottom: 7px;
+  background: linear-gradient(90deg, var(--card) 25%, var(--card2) 50%, var(--card) 75%);
+  background-size: 200% 100%;
+  animation: shine 1.4s infinite;
+}
+@keyframes shine { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-.no-key-banner{background:rgba(255,77,109,0.08);border:1px solid rgba(255,77,109,0.2);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--red);font-family:var(--font-mono);line-height:1.6;cursor:pointer}
-.no-key-banner strong{display:block;margin-bottom:4px}
+/* Deals */
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.mbox {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+.mval {
+  font-family: 'DM Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+}
+.mval.y { color: var(--accent); }
+.mval.g { color: var(--green); }
+.mlbl { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 18px;font-family:var(--font-mono);font-size:12px;color:var(--text);opacity:0;transition:all 0.3s;z-index:200;white-space:nowrap}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.filters {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+  scrollbar-width: none;
+}
+.filters::-webkit-scrollbar { display: none; }
+.chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.chip.on { background: rgba(232,255,71,0.1); border-color: var(--accent); color: var(--accent); }
+
+.dc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+.dc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+.dc-buyer { font-size: 13px; font-weight: 600; flex: 1; padding-right: 8px; line-height: 1.3; }
+.dc-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); white-space: nowrap; }
+.dc-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
+.dc-who { font-size: 11px; color: var(--muted); }
+.dc-when { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+.dc-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.b-capex { background: rgba(77,159,255,0.12); color: var(--blue); }
+.b-compute { background: rgba(77,255,184,0.12); color: var(--green); }
+.b-acquisition { background: rgba(192,132,252,0.12); color: var(--purple); }
+.b-jv { background: rgba(232,255,71,0.12); color: var(--accent); }
+.b-infra { background: rgba(255,77,109,0.12); color: var(--red); }
+.dc-detail { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* Chat */
+.chat-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+}
+.chat-msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 0;
+  scrollbar-width: none;
+}
+.chat-msgs::-webkit-scrollbar { display: none; }
+.msg { margin-bottom: 12px; max-width: 86%; }
+.msg.u { margin-left: auto; }
+.msg.a { margin-right: auto; }
+.bubble { padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.6; }
+.msg.u .bubble { background: var(--accent); color: #0a0a0f; font-weight: 600; border-radius: 12px 12px 3px 12px; }
+.msg.a .bubble { background: var(--card); border: 1px solid var(--border); color: var(--text); border-radius: 12px 12px 12px 3px; }
+.mtime { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); margin-top: 3px; padding: 0 3px; }
+.msg.u .mtime { text-align: right; }
+
+.typing { display: flex; gap: 4px; align-items: center; padding: 10px 12px; }
+.typing span { width: 5px; height: 5px; background: var(--muted); border-radius: 50%; animation: t 1.2s infinite; }
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes t { 0%,80%,100%{transform:scale(0.6);opacity:0.3} 40%{transform:scale(1);opacity:1} }
+
+.chips-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 10px 14px 0;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+.chips-row::-webkit-scrollbar { display: none; }
+.qchip {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.qchip:active { border-color: var(--accent); color: var(--accent); }
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+}
+.chat-in {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  resize: none;
+  min-height: 40px;
+  max-height: 100px;
+  outline: none;
+  line-height: 1.4;
+}
+.chat-in:focus { border-color: rgba(232,255,71,0.35); }
+.chat-in::placeholder { color: var(--muted); }
+.send {
+  width: 40px; height: 40px;
+  background: var(--accent);
+  border: none; border-radius: 10px;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.2s;
+}
+.send:active { opacity: 0.7; }
+.send svg { width: 16px; height: 16px; fill: #0a0a0f; }
+
+/* Settings */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 50;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+.overlay.on { display: flex; }
+.sheet {
+  background: var(--card);
+  border-radius: 18px 18px 0 0;
+  border-top: 1px solid var(--border);
+  padding: 22px 18px 36px;
+  width: 100%;
+  max-width: 430px;
+}
+.sheet h2 { font-size: 15px; font-weight: 600; margin-bottom: 5px; }
+.sheet p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+.sheet label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+.sheet input {
+  width: 100%;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 10px;
+}
+.sheet input:focus { border-color: rgba(232,255,71,0.4); }
+.save-btn {
+  width: 100%;
+  background: var(--accent);
+  color: #0a0a0f;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.cancel-btn {
+  width: 100%;
+  background: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+}
+.kstatus {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 14px;
+  display: none;
+}
+.kstatus.ok { display: block; background: rgba(77,255,184,0.1); color: var(--green); }
+.kstatus.no { display: block; background: rgba(255,77,109,0.1); color: var(--red); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 70px; left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text);
+  opacity: 0;
+  transition: all 0.25s;
+  z-index: 99;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="header">
-    <div class="header-logo">DC<span>Intel</span></div>
-    <div class="header-right">
-      <div class="header-tag"><span class="live-dot"></span>Live</div>
-      <button class="settings-btn" onclick="openSettings()" title="Settings">⚙</button>
+
+  <div class="hdr">
+    <div class="logo">DC<span>Intel</span></div>
+    <div class="hdr-right">
+      <div class="live-pill"><span class="dot"></span>Live</div>
+      <button class="gear-btn" onclick="openSettings()">⚙</button>
     </div>
   </div>
 
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('news')">News</div>
-    <div class="tab" onclick="switchTab('deals')">Deals</div>
-    <div class="tab" onclick="switchTab('claude')">Ask AI</div>
+    <div class="tab on" id="tab-news" onclick="switchTab('news')">News</div>
+    <div class="tab" id="tab-deals" onclick="switchTab('deals')">Deals</div>
+    <div class="tab" id="tab-chat" onclick="switchTab('chat')">Ask AI</div>
   </div>
 
-  <div class="content">
+  <div class="pages">
 
     <!-- NEWS -->
-    <div class="page active" id="page-news">
-      <div class="news-feed">
-        <div class="feed-header">
-          <div class="feed-label" id="news-label">DC & AI Infrastructure</div>
-          <button class="refresh-btn" onclick="loadNews()">↻ Refresh</button>
-        </div>
-        <div id="news-container">
-          <div class="loading-card"><div class="skeleton wide"></div><div class="skeleton medium"></div><div class="skeleton short"></div></div>
-          <div class="loading-card"><div class="skeleton wide"></div><div class="skeleton medium"></div><div class="skeleton short"></div></div>
-          <div class="loading-card"><div class="skeleton wide"></div><div class="skeleton medium"></div><div class="skeleton short"></div></div>
-        </div>
+    <div class="page on" id="page-news">
+      <div class="feed-hdr">
+        <div class="feed-lbl" id="feed-lbl">Loading...</div>
+        <button class="refresh" onclick="loadNews()">↻ Refresh</button>
+      </div>
+      <div id="news-list">
+        <div class="skel"><div class="skel-line" style="width:40%"></div><div class="skel-line" style="width:85%"></div><div class="skel-line" style="width:60%"></div></div>
+        <div class="skel"><div class="skel-line" style="width:40%"></div><div class="skel-line" style="width:85%"></div><div class="skel-line" style="width:60%"></div></div>
+        <div class="skel"><div class="skel-line" style="width:40%"></div><div class="skel-line" style="width:85%"></div><div class="skel-line" style="width:60%"></div></div>
+        <div class="skel"><div class="skel-line" style="width:40%"></div><div class="skel-line" style="width:85%"></div><div class="skel-line" style="width:60%"></div></div>
       </div>
     </div>
 
     <!-- DEALS -->
     <div class="page" id="page-deals">
-      <div class="deals-wrap">
-        <div class="metric-row">
-          <div class="metric-box">
-            <div class="metric-val yellow" id="d-total">$1.28T</div>
-            <div class="metric-lbl">Total tracked</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-val green" id="d-count">14</div>
-            <div class="metric-lbl">Deals logged</div>
-          </div>
-        </div>
-        <div class="filter-row">
-          <div class="filter-chip active" onclick="filterDeals('all',this)">All</div>
-          <div class="filter-chip" onclick="filterDeals('capex',this)">Capex</div>
-          <div class="filter-chip" onclick="filterDeals('compute',this)">Compute</div>
-          <div class="filter-chip" onclick="filterDeals('acquisition',this)">M&A</div>
-          <div class="filter-chip" onclick="filterDeals('jv',this)">JV</div>
-          <div class="filter-chip" onclick="filterDeals('infra',this)">Infra</div>
-        </div>
-        <div id="deals-container"></div>
+      <div class="metrics">
+        <div class="mbox"><div class="mval y" id="d-total">$1.28T</div><div class="mlbl">Total tracked</div></div>
+        <div class="mbox"><div class="mval g" id="d-count">14</div><div class="mlbl">Deals logged</div></div>
       </div>
+      <div class="filters">
+        <div class="chip on" onclick="fDeal('all',this)">All</div>
+        <div class="chip" onclick="fDeal('capex',this)">Capex</div>
+        <div class="chip" onclick="fDeal('compute',this)">Compute</div>
+        <div class="chip" onclick="fDeal('acquisition',this)">M&A</div>
+        <div class="chip" onclick="fDeal('jv',this)">JV</div>
+        <div class="chip" onclick="fDeal('infra',this)">Infra</div>
+      </div>
+      <div id="deal-list"></div>
     </div>
 
-    <!-- ASK AI -->
-    <div class="page" id="page-claude">
-      <div class="claude-wrap">
-        <div class="claude-msgs" id="claudeMsgs">
-          <div class="msg assistant">
-            <div class="msg-bubble">Hey — I'm your DC Intel assistant. Ask me about deals, power constraints, neocloud operators, modular DC economics, or any APAC market. What do you want to know?</div>
-            <div class="msg-time">Now</div>
+    <!-- CHAT -->
+    <div class="page" id="page-chat">
+      <div class="chat-wrap">
+        <div class="chat-msgs" id="chat-msgs">
+          <div class="msg a">
+            <div class="bubble">Hey — I'm your DC Intel assistant. Ask me about deals, power constraints, neoclouds, modular DC economics, or any APAC market.</div>
+            <div class="mtime">Now</div>
           </div>
         </div>
-        <div class="quick-chips">
-          <div class="quick-chip" onclick="quickAsk('Latest Anthropic compute deals?')">Anthropic deals</div>
-          <div class="quick-chip" onclick="quickAsk('What is driving 10-50MW demand?')">10-50MW thesis</div>
-          <div class="quick-chip" onclick="quickAsk('Best APAC markets for DC right now?')">APAC markets</div>
-          <div class="quick-chip" onclick="quickAsk('Explain modular DC IRR advantage')">Modular IRR</div>
-          <div class="quick-chip" onclick="quickAsk('Compare CoreWeave vs Nebius')">CoreWeave vs Nebius</div>
-          <div class="quick-chip" onclick="quickAsk('Power constraints in primary DC markets')">Power crisis</div>
+        <div class="chips-row">
+          <div class="qchip" onclick="qAsk('Latest Anthropic deals?')">Anthropic deals</div>
+          <div class="qchip" onclick="qAsk('10-50MW mid-market thesis')">10-50MW thesis</div>
+          <div class="qchip" onclick="qAsk('Best APAC DC markets right now?')">APAC markets</div>
+          <div class="qchip" onclick="qAsk('Modular DC IRR advantage?')">Modular IRR</div>
+          <div class="qchip" onclick="qAsk('CoreWeave vs Nebius comparison')">CoreWeave vs Nebius</div>
+          <div class="qchip" onclick="qAsk('Power constraints in primary DC markets')">Power crisis</div>
         </div>
-        <div class="claude-input-row">
-          <textarea class="claude-input" id="claudeInput" placeholder="Ask about DC deals, markets, power…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-          <button class="send-btn" onclick="sendMessage()">
-            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        <div class="chat-input-row">
+          <textarea class="chat-in" id="chat-in" placeholder="Ask about DC deals, markets, power…" rows="1" onkeydown="chatKey(event)" oninput="chatResize(this)"></textarea>
+          <button class="send" onclick="sendChat()">
+            <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
           </button>
         </div>
       </div>
@@ -259,265 +575,282 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   </div>
 </div>
 
-<!-- Settings sheet -->
-<div class="settings-overlay" id="settingsOverlay" onclick="closeSettingsOutside(event)">
-  <div class="settings-sheet">
-    <div class="settings-title">API Settings</div>
-    <div class="settings-sub">Add your Anthropic API key to enable AI summaries and the Ask AI tab. Your key is stored locally on your device only — never sent anywhere except Anthropic.</div>
-    <div id="keyStatus" class="key-status"></div>
-    <div class="settings-label">Anthropic API Key</div>
-    <input class="settings-input" id="apiKeyInput" type="password" placeholder="sk-ant-..." />
-    <button class="settings-save" onclick="saveKey()">Save Key</button>
-    <button class="settings-cancel" onclick="closeSettings()">Cancel</button>
+<!-- Settings -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="sheet">
+    <h2>API Key</h2>
+    <p>Your Anthropic key powers AI summaries and the Ask AI tab. Stored only on your device.</p>
+    <div class="kstatus" id="kstatus"></div>
+    <label>Anthropic API Key</label>
+    <input type="password" id="key-in" placeholder="sk-ant-..." />
+    <button class="save-btn" onclick="saveKey()">Save</button>
+    <button class="cancel-btn" onclick="closeSettings()">Cancel</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SYSTEM_PROMPT = `You are DC Intel — a sharp, concise AI assistant for data center and AI infrastructure professionals. You have deep knowledge of:
-- Major 2025-2026 deals: Anthropic/SpaceX $45B compute deal (Colossus 1&2, Memphis TN, $1.25B/month), Anthropic/Google 3.5GW TPUs, Aligned DC $40B acquisition (NVIDIA/Microsoft/BlackRock/Abu Dhabi MGX), Meta/Blue Owl $27B Hyperion JV (2GW Louisiana), Nebius/Microsoft $17-19B, Nebius/Meta $3B, Stargate $500B (OpenAI/SoftBank/Oracle), Meta Lebanon Indiana $10B
-- 2026 hyperscaler capex: Amazon $200B, Google $180B, Microsoft $145B, Meta $125B, Oracle $50B — combined $700B+
-- APAC DC markets: Johor Malaysia (3.5GW pipeline, lowest APAC cost, Singapore overflow), Selangor Malaysia (Google RM15B, MIDA $20.9B), Singapore (land constrained, 1200MW existing, only 150MW headroom), Inzai Japan (policy score 5/5), India (Mumbai/Chennai/Hyderabad, 1500-1800MW headroom), Australia (Melbourne/Sydney, grid score 5/5), Auckland NZ (only APAC market in global top 10 renewables)
-- Market dynamics: NA primary market vacancy 1.4% (record low), 10-50MW mid-market thesis, neocloud operators (CoreWeave public NVIDIA-backed, Nebius $20-22B committed deals, Lambda Labs), modular DC economics (4-5pp IRR advantage, 73% less equity at risk), grid interconnection 5-7yr delays, transformer lead times 128 weeks average
-- Inference shift: training drove 75% of 2025 DC demand → inference overtakes training by 2027, distributed compute demand, 10-30MW nodes beat 500MW campuses for inference
-- Power: nuclear PPAs (Three Mile Island/Microsoft), stranded assets Ireland €5.8B, EU PUE mandates (1.5 by 2026, 1.3 by 2030), liquid cooling retrofit $2-4M/MW
+// ── State ──────────────────────────────────────────
+let newsItems = [];
+let dealFilter = 'all';
+let chatHistory = [];
 
-Be direct, specific, use numbers. 3-5 short paragraphs or bullet points. No fluff. Sound like a sharp analyst, not a chatbot.`;
+const SYSTEM = `You are DC Intel — a sharp AI assistant for data center and AI infrastructure professionals.
+
+Key facts:
+- Anthropic/SpaceX $45B compute deal (Colossus 1&2, Memphis, $1.25B/month through May 2029)
+- Anthropic/Google 3.5GW TPU deal (Apr 2026, largest private compute commitment ever)
+- Aligned DC $40B acquisition by NVIDIA/Microsoft/BlackRock/Abu Dhabi MGX (Oct 2025)
+- Meta/Blue Owl $27B Hyperion JV, 2GW Louisiana campus (Oct 2025)
+- Nebius/Microsoft $17-19B compute deal (Sep 2025)
+- Nebius/Meta $3B deal (Nov 2025)
+- Stargate $500B program — OpenAI/SoftBank/Oracle (2025)
+- 2026 capex: Amazon $200B, Google $180B, Microsoft $145B, Meta $125B, Oracle $50B
+- NA primary market vacancy: 1.4% record low. 10-30MW asking rates: sharpest increase of any segment
+- Transformer lead times: 128 weeks average, 144 weeks for generator step-up
+- Inference overtakes training as dominant workload by 2027 → drives 10-30MW distributed demand
+- APAC: Johor Malaysia (3.5GW pipeline, lowest cost), Singapore (land constrained), Inzai Japan (policy score 5/5), India (Mumbai/Chennai/Hyderabad), Auckland NZ (top 10 globally for renewables)
+- Modular DC: 4-5pp IRR advantage, 73% less equity at risk before first revenue
+
+Be direct. Use numbers. 3-4 short paragraphs max. Sound like a sharp analyst.`;
 
 const DEALS = [
-  {date:'2026-05',buyer:'Anthropic',counterparty:'SpaceX / xAI',valueB:45,valueTxt:'$45B',type:'compute',detail:'Full capacity of Colossus 1 & 2, Memphis TN. $1.25B/month through May 2029. 300MW+. Disclosed in SpaceX S-1 IPO filing.'},
-  {date:'2026-04',buyer:'Anthropic',counterparty:'Google / Broadcom',valueB:350,valueTxt:'3.5 GW',type:'compute',detail:'3.5GW of TPU compute capacity. Expansion of Oct 2025 1GW deal. Coming online 2027. One of largest private compute commitments ever.'},
-  {date:'2026-02',buyer:'Meta',counterparty:'Lebanon, Indiana',valueB:10,valueTxt:'$10B+',type:'infra',detail:'$10B+ AI data center. 1GW capacity. Broke ground Feb 2026. Part of Meta\'s distributed inference build-out.'},
-  {date:'2026-01',buyer:'Amazon',counterparty:'Capex 2026',valueB:200,valueTxt:'$200B',type:'capex',detail:'2026 capex guidance. Majority AWS AI data centers. Backlog $244B, up 40% YoY. AWS hit fastest growth in 13 quarters at 24%.'},
-  {date:'2026-01',buyer:'Google',counterparty:'Capex 2026',valueB:180,valueTxt:'$180B',type:'capex',detail:'$175-185B 2026 capex. $240B cloud backlog. Compute-constrained near term per Sundar Pichai. Cloud grew 48% YoY in Q4 2025.'},
-  {date:'2026-01',buyer:'Microsoft',counterparty:'Capex 2026',valueB:145,valueTxt:'$145B',type:'capex',detail:'$145B annualized capex. $25B attributed to component pricing increases. Nuclear PPA with Three Mile Island already signed.'},
-  {date:'2026-01',buyer:'Meta',counterparty:'Capex 2026',valueB:125,valueTxt:'$125B',type:'capex',detail:'$115-135B 2026 capex. Up from $72B in 2025. Q1 capex doubled YoY to $20B. Nuclear partnerships with TerraPower, Oklo, Vistra (6.6GW).'},
-  {date:'2025-11',buyer:'Nebius',counterparty:'Meta',valueB:3,valueTxt:'$3B',type:'compute',detail:'5-year AI infrastructure deal. Demand overwhelmed available capacity at signing. Part of Nebius $20-22B committed deal book.'},
-  {date:'2025-10',buyer:'NVIDIA + Microsoft + BlackRock',counterparty:'Aligned Data Centers',valueB:40,valueTxt:'$40B',type:'acquisition',detail:'Landmark platform acquisition. BlackRock GIP + Abu Dhabi MGX led. Benchmark for mid-market DC platform exit this cycle.'},
-  {date:'2025-10',buyer:'Meta',counterparty:'Blue Owl Capital',valueB:27,valueTxt:'$27B',type:'jv',detail:'Hyperion AI campus JV, Richland Parish Louisiana. Up to 2GW. Meta\'s largest global DC project.'},
-  {date:'2025-09',buyer:'Nebius',counterparty:'Microsoft',valueB:18,valueTxt:'$17-19B',type:'compute',detail:'Dedicated capacity from Vineland NJ data center. Revenue ramping through 2026. Nebius\'s largest ever deal at signing.'},
-  {date:'2025-09',buyer:'Microsoft',counterparty:'Three Mile Island',valueB:null,valueTxt:'Nuclear PPA',type:'infra',detail:'Long-term nuclear power purchase agreement for AI DC load. First restart of Three Mile Island unit. Template for AI nuclear strategy.'},
-  {date:'2025-07',buyer:'OpenAI + SoftBank + Oracle',counterparty:'Stargate',valueB:500,valueTxt:'$500B',type:'infra',detail:'$500B infrastructure program. Abilene TX supercluster operational. Largest single AI infra commitment ever announced.'},
-  {date:'2026-01',buyer:'Oracle',counterparty:'Capex 2026',valueB:50,valueTxt:'$50B',type:'capex',detail:'$50B capex target 2026. Capital intensity at 57% of revenue. Stargate partner. Stargate Abilene TX already operational.'},
+  {date:'2026-05',buyer:'Anthropic',counterparty:'SpaceX / xAI',valueTxt:'$45B',valueB:45,type:'compute',detail:'Colossus 1 & 2, Memphis TN. $1.25B/month through May 2029. 300MW+. Disclosed in SpaceX IPO filing.'},
+  {date:'2026-04',buyer:'Anthropic',counterparty:'Google / Broadcom',valueTxt:'3.5 GW',valueB:350,type:'compute',detail:'3.5GW TPU capacity. Expansion of Oct 2025 1GW deal. Coming online 2027.'},
+  {date:'2026-02',buyer:'Meta',counterparty:'Lebanon, Indiana',valueTxt:'$10B+',valueB:10,type:'infra',detail:'1GW AI data center. Broke ground Feb 2026. Part of Meta distributed inference build-out.'},
+  {date:'2026-01',buyer:'Amazon',counterparty:'Capex 2026',valueTxt:'$200B',valueB:200,type:'capex',detail:'2026 capex guidance. Majority AWS AI data centers. Backlog $244B, up 40% YoY.'},
+  {date:'2026-01',buyer:'Google',counterparty:'Capex 2026',valueTxt:'$180B',valueB:180,type:'capex',detail:'$175-185B 2026 capex. $240B cloud backlog. Cloud grew 48% YoY in Q4 2025.'},
+  {date:'2026-01',buyer:'Microsoft',counterparty:'Capex 2026',valueTxt:'$145B',valueB:145,type:'capex',detail:'$145B annualized. Nuclear PPA with Three Mile Island. $25B from component pricing.'},
+  {date:'2026-01',buyer:'Meta',counterparty:'Capex 2026',valueTxt:'$125B',valueB:125,type:'capex',detail:'$115-135B 2026. Up from $72B in 2025. Q1 capex doubled YoY to $20B.'},
+  {date:'2025-11',buyer:'Nebius',counterparty:'Meta',valueTxt:'$3B',valueB:3,type:'compute',detail:'5-year AI infrastructure deal. Demand overwhelmed available capacity at signing.'},
+  {date:'2025-10',buyer:'NVIDIA + Microsoft + BlackRock',counterparty:'Aligned Data Centers',valueTxt:'$40B',valueB:40,type:'acquisition',detail:'BlackRock GIP + Abu Dhabi MGX led. Benchmark platform exit for mid-market DC this cycle.'},
+  {date:'2025-10',buyer:'Meta',counterparty:'Blue Owl Capital',valueTxt:'$27B',valueB:27,type:'jv',detail:'Hyperion AI campus JV, Louisiana. Up to 2GW. Meta largest global DC project.'},
+  {date:'2025-09',buyer:'Nebius',counterparty:'Microsoft',valueTxt:'$17-19B',valueB:18,type:'compute',detail:'Dedicated GPU capacity, Vineland NJ. Largest Nebius deal at signing.'},
+  {date:'2025-09',buyer:'Microsoft',counterparty:'Three Mile Island',valueTxt:'Nuclear PPA',valueB:null,type:'infra',detail:'Long-term nuclear PPA. First restart of Three Mile Island. Template for AI nuclear strategy.'},
+  {date:'2025-07',buyer:'OpenAI + SoftBank + Oracle',counterparty:'Stargate',valueTxt:'$500B',valueB:500,type:'infra',detail:'$500B infrastructure program. Abilene TX supercluster operational. Largest AI infra commitment ever.'},
+  {date:'2026-01',buyer:'Oracle',counterparty:'Capex 2026',valueTxt:'$50B',valueB:50,type:'capex',detail:'$50B capex 2026. Capital intensity 57% of revenue. Stargate partner.'},
 ];
 
-let chatHistory = [];
-let activeFilter = 'all';
+const FALLBACK = [
+  {source:'DatacenterDynamics',pubDate:'May 28, 2026',tag:'deal',title:'Anthropic expands to SpaceX Colossus 2 — $1.25B/month deal now covers both Memphis campuses',snippet:'The $45B total deal spans 300MW+ across Colossus 1 and 2. Disclosed in SpaceX S-1 IPO filing targeting $1.75T valuation.',link:'#'},
+  {source:'Structure Research',pubDate:'May 26, 2026',tag:'market',title:'North America primary DC vacancy hits 1.4% — tightest in recorded history',snippet:'Asking rates for 10-30MW requirements posted the sharpest pricing increases of any segment. Columbus up 1,800% since 2020.',link:'#'},
+  {source:'Uptime Institute',pubDate:'May 24, 2026',tag:'power',title:'Transformer lead times now averaging 128 weeks — DC pipeline at risk',snippet:'Generator step-up transformers averaging 144 weeks per Wood Mackenzie. Operators who pre-ordered in 2024 hold a competitive moat.',link:'#'},
+  {source:'DCD Magazine',pubDate:'May 22, 2026',tag:'deal',title:'Hyperscalers commit $700B in 2026 capex — AI infrastructure crosses $1T run rate',snippet:'Amazon $200B, Google $180B, Microsoft $145B, Meta $125B. 75% directed at AI infrastructure.',link:'#'},
+  {source:'CBRE Research',pubDate:'May 20, 2026',tag:'market',title:'Neocloud operators drive 10-50MW demand surge — institutional capital underwriting the gap',snippet:'CoreWeave, Nebius and 100+ operators need fast-deployable 10-20MW footprints. Sub-investment-grade credit the key challenge.',link:'#'},
+  {source:'Datacenter Knowledge',pubDate:'May 18, 2026',tag:'infra',title:'Modular DC deployments cut timelines 30-50% vs traditional builds, IRR gains of 4-5pp',snippet:'Phased 50MW builds vs single 150MW: modular approach reduces equity at risk by 73% before first revenue.',link:'#'},
+  {source:'APDCA Report',pubDate:'May 15, 2026',tag:'deal',title:'Johor Malaysia pipeline crosses 3.5GW as Singapore overflow demand intensifies',snippet:'Land abundant, lowest cost in APAC. Johor-Singapore SEZ operational. 12 MIDA-approved projects worth $20.9B.',link:'#'},
+  {source:'Reuters',pubDate:'May 12, 2026',tag:'policy',title:'EU PUE mandate takes effect — DCs above 1.5 PUE face restrictions from 2026',snippet:'Operators in Germany, Netherlands and Ireland face compliance deadlines. Liquid cooling retrofit $2-4M per MW.',link:'#'},
+];
 
-// API key management
-function getApiKey() { try { return localStorage.getItem('dc_intel_api_key') || ''; } catch { return ''; } }
-function saveKey() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key.startsWith('sk-ant-') && key !== '') { showToast('Invalid key format'); return; }
-  try { localStorage.setItem('dc_intel_api_key', key); } catch {}
-  closeSettings();
-  showToast(key ? '✓ API key saved' : 'Key cleared');
-  updateKeyStatus();
-}
-function updateKeyStatus() {
-  const key = getApiKey();
-  const el = document.getElementById('keyStatus');
-  if (key) { el.className = 'key-status set'; el.textContent = '✓ API key configured — AI features active'; }
-  else { el.className = 'key-status unset'; el.textContent = '✗ No API key — add yours to enable AI features'; }
-}
+// ── API Key ────────────────────────────────────────
+function getKey() { try { return localStorage.getItem('dci_key') || ''; } catch { return ''; } }
 function openSettings() {
-  document.getElementById('apiKeyInput').value = getApiKey();
-  updateKeyStatus();
-  document.getElementById('settingsOverlay').classList.add('open');
+  document.getElementById('key-in').value = getKey();
+  const k = getKey();
+  const s = document.getElementById('kstatus');
+  s.className = k ? 'kstatus ok' : 'kstatus no';
+  s.textContent = k ? '✓ Key saved — AI features active' : '✗ No key — AI features disabled';
+  document.getElementById('overlay').classList.add('on');
 }
-function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
-function closeSettingsOutside(e) { if (e.target === document.getElementById('settingsOverlay')) closeSettings(); }
-
-// Tab switching
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['news','deals','claude'][i] === tab));
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + tab).classList.add('active');
-}
-
-// Tag helpers
-function tagClass(tag) {
-  return {deal:'tag-deal',policy:'tag-policy',power:'tag-power',infra:'tag-infra',market:'tag-market'}[tag] || 'tag-infra';
+function closeSettings() { document.getElementById('overlay').classList.remove('on'); }
+function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeSettings(); }
+function saveKey() {
+  const v = document.getElementById('key-in').value.trim();
+  try { localStorage.setItem('dci_key', v); } catch {}
+  closeSettings();
+  toast(v ? '✓ Key saved' : 'Key cleared');
 }
 
-// News loading
+// ── Tabs ───────────────────────────────────────────
+function switchTab(name) {
+  ['news','deals','chat'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('on', t === name);
+    document.getElementById('page-' + t).classList.toggle('on', t === name);
+  });
+}
+
+// ── News ───────────────────────────────────────────
 async function loadNews() {
-  const container = document.getElementById('news-container');
-  const label = document.getElementById('news-label');
-  container.innerHTML = '<div class="loading-card"><div class="skeleton wide"></div><div class="skeleton medium"></div><div class="skeleton short"></div></div>'.repeat(3);
-
+  document.getElementById('feed-lbl').textContent = 'Loading...';
+  document.getElementById('news-list').innerHTML =
+    '<div class="skel"><div class="skel-line" style="width:40%"></div><div class="skel-line" style="width:85%"></div><div class="skel-line" style="width:60%"></div></div>'.repeat(4);
   try {
-    const res = await fetch('/api/news');
-    if (!res.ok) throw new Error('fetch failed');
-    const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      label.textContent = `${data.items.length} live articles`;
-      renderNews(data.items);
-    } else {
-      throw new Error('no items');
-    }
-  } catch(e) {
-    label.textContent = 'Curated feed';
-    renderNews(FALLBACK_NEWS);
+    const r = await fetch('/api/news');
+    if (!r.ok) throw new Error();
+    const d = await r.json();
+    if (!d.items || !d.items.length) throw new Error();
+    newsItems = d.items;
+    document.getElementById('feed-lbl').textContent = d.items.length + ' live articles';
+  } catch {
+    newsItems = FALLBACK;
+    document.getElementById('feed-lbl').textContent = 'Curated feed';
   }
+  renderNews();
 }
 
-function renderNews(items) {
-  const container = document.getElementById('news-container');
-  container.innerHTML = items.map((n, i) => `
-    <div class="news-card ${tagClass(n.tag)}">
-      <div class="card-meta">
-        <span class="card-source">${n.source}</span>
-        <span class="card-dot"></span>
-        <span class="card-date">${n.pubDate || n.date}</span>
-        <span class="card-dot"></span>
-        <span class="card-tag">${n.tag}</span>
-      </div>
-      <div class="card-title">${n.title}</div>
-      ${n.snippet ? `<div class="card-snippet">${n.snippet.slice(0,160)}${n.snippet.length>160?'…':''}</div>` : ''}
-      ${n.link && n.link !== '#' ? `<a class="card-link" href="${n.link}" target="_blank">Read full story →</a>` : ''}
-      <button class="summarize-btn" onclick="summarize(${i}, this, ${JSON.stringify(n.title).replace(/'/g,"&#39;")}, ${JSON.stringify((n.snippet||'').slice(0,300)).replace(/'/g,"&#39;")})">
-        ✦ AI Summary
-      </button>
-      <div class="ai-summary" id="summary-${i}">
-        <div class="ai-summary-label">DC Intel AI</div>
-        <div class="summary-text"></div>
-      </div>
-    </div>
-  `).join('');
+function cleanTitle(t) {
+  // Strip trailing " - Publication Name" from Google News titles
+  return t.replace(/\s[-–]\s[^-–]{3,40}$/, '').trim();
 }
 
-async function summarize(idx, btn, title, snippet) {
-  const key = getApiKey();
-  const summaryDiv = document.getElementById('summary-' + idx);
-  if (summaryDiv.classList.contains('visible')) {
-    summaryDiv.classList.remove('visible');
+function renderNews() {
+  const list = document.getElementById('news-list');
+  list.innerHTML = '';
+  newsItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'nc';
+    div.innerHTML = `
+      <div class="nc-top">
+        <span class="nc-src">${item.source}</span>
+        <span class="nc-sep">·</span>
+        <span class="nc-date">${item.pubDate || item.date}</span>
+        <span class="nc-tag tag-${item.tag}">${item.tag}</span>
+      </div>
+      <div class="nc-title">${cleanTitle(item.title)}</div>
+      ${item.snippet ? `<div class="nc-snippet">${item.snippet.slice(0,160)}${item.snippet.length > 160 ? '…' : ''}</div>` : ''}
+      <div class="nc-actions">
+        ${item.link && item.link !== '#' ? `<a class="nc-link" href="${item.link}" target="_blank">Read →</a>` : ''}
+        <button class="ai-btn" data-idx="${i}">✦ AI Summary</button>
+      </div>
+      <div class="ai-box" id="ai-${i}">
+        <div class="ai-lbl">DC Intel AI</div>
+        <div class="ai-txt"></div>
+      </div>`;
+    list.appendChild(div);
+  });
+
+  // Attach summary button events after DOM is built
+  list.querySelectorAll('.ai-btn').forEach(btn => {
+    btn.addEventListener('click', () => summarize(parseInt(btn.dataset.idx), btn));
+  });
+}
+
+async function summarize(i, btn) {
+  const box = document.getElementById('ai-' + i);
+  if (box.classList.contains('on')) {
+    box.classList.remove('on');
     btn.textContent = '✦ AI Summary';
     return;
   }
-  if (!key) { openSettings(); showToast('Add your API key first'); return; }
-  btn.textContent = 'Summarizing…';
+  const key = getKey();
+  if (!key) { openSettings(); toast('Add your API key first'); return; }
+  btn.textContent = 'Thinking…';
   btn.disabled = true;
+  const item = newsItems[i];
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: `Summarize in 3 bullet points (•), each under 20 words. Specific numbers only.\n\nTitle: ${title}\nContent: ${snippet}` }]
+        model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: SYSTEM,
+        messages: [{ role: 'user', content: `3 bullet points (•), max 20 words each, specific numbers:\n\nTitle: ${item.title}\n${item.snippet || ''}` }]
       })
     });
-    const data = await res.json();
-    const text = data.content?.map(c => c.text||'').join('') || 'No summary available.';
-    summaryDiv.querySelector('.summary-text').textContent = text;
-    summaryDiv.classList.add('visible');
+    const d = await r.json();
+    box.querySelector('.ai-txt').textContent = d.content?.map(c => c.text || '').join('') || 'No summary.';
+    box.classList.add('on');
     btn.textContent = '✦ Hide';
-  } catch(e) {
-    summaryDiv.querySelector('.summary-text').textContent = 'Error — check your API key in settings.';
-    summaryDiv.classList.add('visible');
+  } catch {
+    box.querySelector('.ai-txt').textContent = 'Error — check your API key in settings.';
+    box.classList.add('on');
     btn.textContent = '✦ Hide';
   }
   btn.disabled = false;
 }
 
-// Deals
-function filterDeals(type, el) {
-  activeFilter = type;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
+// ── Deals ──────────────────────────────────────────
+function fDeal(type, el) {
+  dealFilter = type;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
   renderDeals();
 }
 
 function renderDeals() {
-  const deals = activeFilter === 'all' ? DEALS : DEALS.filter(d => d.type === activeFilter);
-  const total = deals.filter(d => d.valueB).reduce((a, d) => a + d.valueB, 0);
-  document.getElementById('d-count').textContent = deals.length;
-  document.getElementById('d-total').textContent = total >= 1000 ? '$' + (total/1000).toFixed(1) + 'T' : '$' + total + 'B';
-  document.getElementById('deals-container').innerHTML = deals.map(d => `
-    <div class="deal-card">
-      <div class="deal-top">
-        <div class="deal-buyer">${d.buyer}</div>
-        <div class="deal-val">${d.valueTxt}</div>
+  const list = dealFilter === 'all' ? DEALS : DEALS.filter(d => d.type === dealFilter);
+  const total = list.filter(d => d.valueB).reduce((a, d) => a + d.valueB, 0);
+  document.getElementById('d-count').textContent = list.length;
+  document.getElementById('d-total').textContent = total >= 1000 ? '$' + (total / 1000).toFixed(1) + 'T' : '$' + total + 'B';
+  const el = document.getElementById('deal-list');
+  el.innerHTML = '';
+  list.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'dc';
+    div.innerHTML = `
+      <div class="dc-top">
+        <div class="dc-buyer">${d.buyer}</div>
+        <div class="dc-val">${d.valueTxt}</div>
       </div>
-      <div class="deal-meta">
-        <span class="deal-counter">${d.counterparty}</span>
-        <span class="card-dot" style="background:var(--border)"></span>
-        <span class="deal-date">${d.date}</span>
-        <span class="card-dot" style="background:var(--border)"></span>
-        <span class="deal-badge b-${d.type}">${d.type}</span>
+      <div class="dc-meta">
+        <span class="dc-who">${d.counterparty}</span>
+        <span class="nc-sep" style="color:var(--border)">·</span>
+        <span class="dc-when">${d.date}</span>
+        <span class="dc-badge b-${d.type}">${d.type}</span>
       </div>
-      <div class="deal-detail">${d.detail}</div>
-    </div>
-  `).join('');
+      <div class="dc-detail">${d.detail}</div>`;
+    el.appendChild(div);
+  });
 }
 
-// Claude chat
-async function sendMessage(text) {
-  const key = getApiKey();
-  const input = document.getElementById('claudeInput');
-  const msg = text || input.value.trim();
+// ── Chat ───────────────────────────────────────────
+async function sendChat(text) {
+  const key = getKey();
+  const inp = document.getElementById('chat-in');
+  const msg = text || inp.value.trim();
   if (!msg) return;
-  if (!key) { openSettings(); showToast('Add your API key first'); return; }
-  input.value = '';
-  input.style.height = 'auto';
-  appendMsg('user', msg);
+  if (!key) { openSettings(); toast('Add your API key first'); return; }
+  inp.value = '';
+  inp.style.height = 'auto';
+  addMsg('u', msg);
   chatHistory.push({ role: 'user', content: msg });
 
-  const typingEl = document.createElement('div');
-  typingEl.className = 'msg assistant';
-  typingEl.id = 'typing';
-  typingEl.innerHTML = '<div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
-  document.getElementById('claudeMsgs').appendChild(typingEl);
-  scrollMsgs();
+  const typing = document.createElement('div');
+  typing.className = 'msg a';
+  typing.id = 'typing';
+  typing.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  document.getElementById('chat-msgs').appendChild(typing);
+  scrollChat();
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: SYSTEM_PROMPT, messages: chatHistory })
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: SYSTEM, messages: chatHistory })
     });
-    const data = await res.json();
-    const reply = data.content?.map(c => c.text||'').join('') || 'No response.';
+    const d = await r.json();
+    const reply = d.content?.map(c => c.text || '').join('') || 'No response.';
     chatHistory.push({ role: 'assistant', content: reply });
     document.getElementById('typing')?.remove();
-    appendMsg('assistant', reply);
-  } catch(e) {
+    addMsg('a', reply);
+  } catch {
     document.getElementById('typing')?.remove();
-    appendMsg('assistant', 'Error reaching Claude. Check your API key in settings ⚙');
+    addMsg('a', 'Error — check your API key in settings ⚙');
   }
 }
 
-function appendMsg(role, text) {
-  const now = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-  div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div><div class="msg-time">${now}</div>`;
-  document.getElementById('claudeMsgs').appendChild(div);
-  scrollMsgs();
+function addMsg(role, text) {
+  const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const d = document.createElement('div');
+  d.className = 'msg ' + role;
+  d.innerHTML = `<div class="bubble">${text.replace(/\n/g, '<br>')}</div><div class="mtime">${now}</div>`;
+  document.getElementById('chat-msgs').appendChild(d);
+  scrollChat();
 }
-function scrollMsgs() { const m = document.getElementById('claudeMsgs'); setTimeout(() => m.scrollTop = m.scrollHeight, 50); }
-function quickAsk(q) { document.getElementById('claudeInput').value = q; sendMessage(q); }
-function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
-function showToast(msg) {
+
+function scrollChat() { const m = document.getElementById('chat-msgs'); setTimeout(() => m.scrollTop = m.scrollHeight, 50); }
+function qAsk(q) { document.getElementById('chat-in').value = q; sendChat(q); }
+function chatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } }
+function chatResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
+
+function toast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  t.textContent = msg;
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 2000);
 }
 
-// Fallback news if API not available
-const FALLBACK_NEWS = [
-  {source:'DatacenterDynamics',date:'May 28, 2026',tag:'deal',title:'Anthropic expands to SpaceX Colossus 2 — $1.25B/month deal now covers both Memphis campuses',snippet:'The $45B total deal spans 300MW+ across Colossus 1 and 2. Disclosed in SpaceX S-1 IPO filing targeting $1.75T valuation.',link:'#'},
-  {source:'Structure Research',date:'May 26, 2026',tag:'market',title:'North America primary DC vacancy hits 1.4% — tightest in recorded history',snippet:'Asking rates for 10-30MW requirements posted sharpest pricing increases of any segment. Columbus up 1,800% since 2020.',link:'#'},
-  {source:'Uptime Institute',date:'May 24, 2026',tag:'power',title:'Transformer lead times now averaging 128 weeks — DC pipeline at risk',snippet:'Generator step-up transformers averaging 144 weeks per Wood Mackenzie. Operators who pre-ordered in 2024 now hold a competitive moat.',link:'#'},
-  {source:'DCD Magazine',date:'May 22, 2026',tag:'deal',title:'Hyperscalers commit $700B in 2026 capex — AI infrastructure crosses $1T run rate',snippet:'Amazon $200B, Google $180B, Microsoft $145B, Meta $125B. 75% directed at AI infra. Data center capex crossing $1T this year.',link:'#'},
-  {source:'CBRE Research',date:'May 20, 2026',tag:'market',title:'Neocloud operators drive 10-50MW demand surge — institutional capital still underwriting the gap',snippet:'CoreWeave, Nebius and 100+ operators need fast-deployable 10-20MW footprints. Sub-investment-grade credit the key underwriting challenge.',link:'#'},
-  {source:'Datacenter Knowledge',date:'May 18, 2026',tag:'infra',title:'Modular DC deployments cut timelines 30-50%, IRR gains of 4-5pp documented',snippet:'Phased 50MW builds vs single 150MW: modular approach reduces equity at risk by 73% before first revenue.',link:'#'},
-  {source:'APDCA Report',date:'May 15, 2026',tag:'deal',title:'Johor Malaysia pipeline crosses 3.5GW as Singapore overflow demand intensifies',snippet:'Land abundant, lowest cost in APAC. Johor-Singapore SEZ operational. Google, Microsoft and 12 MIDA-approved projects ($20.9B).',link:'#'},
-  {source:'Reuters',date:'May 12, 2026',tag:'policy',title:'EU PUE mandate takes effect — DCs above 1.5 PUE face restrictions from 2026',snippet:'Operators in Germany, Netherlands and Ireland facing compliance deadlines. Liquid cooling retrofit costs $2-4M per MW.',link:'#'},
-];
-
+// ── Init ───────────────────────────────────────────
 renderDeals();
 loadNews();
 </script>
