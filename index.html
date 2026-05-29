@@ -67,35 +67,35 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .feed-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 .refresh-btn{font-family:var(--font-mono);font-size:10px;color:var(--accent);cursor:pointer;background:none;border:none;padding:4px 0}
 
-.news-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;transition:all 0.2s;position:relative;overflow:hidden}
-.news-card:active{transform:scale(0.98);background:var(--surface2)}
-.news-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 12px 12px 16px;margin-bottom:10px;transition:all 0.2s;position:relative;display:block;width:100%}
+.news-card:active{opacity:0.85}
+.news-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:12px 0 0 12px;background:var(--border)}
 .news-card.tag-deal::before{background:var(--accent)}
 .news-card.tag-policy::before{background:var(--blue)}
 .news-card.tag-power::before{background:var(--red)}
 .news-card.tag-infra::before{background:var(--accent2)}
 .news-card.tag-market::before{background:#c084fc}
 
-.card-meta{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:nowrap;overflow:hidden}
-.card-source{font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
-.card-date{font-family:var(--font-mono);font-size:9px;color:var(--muted);white-space:nowrap;flex-shrink:0}
-.card-dot{width:3px;height:3px;background:var(--border);border-radius:50%;flex-shrink:0}
-.card-tag{font-family:var(--font-mono);font-size:9px;padding:2px 6px;border-radius:20px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
-.tag-deal .card-tag{background:rgba(232,255,71,0.12);color:var(--accent)}
-.tag-policy .card-tag{background:rgba(77,159,255,0.12);color:var(--blue)}
-.tag-power .card-tag{background:rgba(255,77,109,0.12);color:var(--red)}
-.tag-infra .card-tag{background:rgba(77,255,184,0.12);color:var(--accent2)}
-.tag-market .card-tag{background:rgba(192,132,252,0.12);color:#c084fc}
+.card-meta{display:flex;align-items:center;gap:5px;margin-bottom:6px;overflow:hidden;white-space:nowrap}
+.card-source{font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;overflow:hidden;text-overflow:ellipsis;max-width:90px;flex-shrink:1}
+.card-date{font-family:var(--font-mono);font-size:9px;color:var(--muted);flex-shrink:0}
+.card-dot{width:2px;height:2px;background:var(--muted);border-radius:50%;flex-shrink:0;opacity:0.5}
+.card-tag{font-family:var(--font-mono);font-size:9px;padding:1px 6px;border-radius:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
+.tag-deal .card-tag{background:rgba(232,255,71,0.15);color:var(--accent)}
+.tag-policy .card-tag{background:rgba(77,159,255,0.15);color:var(--blue)}
+.tag-power .card-tag{background:rgba(255,77,109,0.15);color:var(--red)}
+.tag-infra .card-tag{background:rgba(77,255,184,0.15);color:var(--accent2)}
+.tag-market .card-tag{background:rgba(192,132,252,0.15);color:#c084fc}
 
-.card-title{font-size:14px;font-weight:600;line-height:1.4;color:var(--text);margin-bottom:5px}
-.card-snippet{font-size:12px;line-height:1.55;color:var(--muted)}
-.card-link{font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-top:6px;display:inline-block}
+.card-title{font-size:13px;font-weight:600;line-height:1.4;color:var(--text);margin-bottom:4px}
+.card-snippet{font-size:11px;line-height:1.5;color:var(--muted)}
+.card-link{font-family:var(--font-mono);font-size:9px;color:var(--accent);margin-top:5px;display:inline-block;text-decoration:none}
 
-.summarize-btn{display:flex;align-items:center;gap:6px;margin-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--accent);background:rgba(232,255,71,0.07);border:1px solid rgba(232,255,71,0.15);border-radius:7px;padding:6px 10px;cursor:pointer;width:100%;justify-content:center;transition:all 0.2s}
-.summarize-btn:active{background:rgba(232,255,71,0.15)}
-.ai-summary{margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--text);display:none}
+.summarize-btn{display:flex;align-items:center;gap:5px;margin-top:8px;font-family:var(--font-mono);font-size:10px;color:var(--accent);background:rgba(232,255,71,0.06);border:1px solid rgba(232,255,71,0.15);border-radius:6px;padding:6px 10px;cursor:pointer;width:100%;justify-content:center;transition:all 0.2s}
+.summarize-btn:active{background:rgba(232,255,71,0.12)}
+.ai-summary{margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.6;color:var(--text);display:none}
 .ai-summary.visible{display:block}
-.ai-summary-label{font-family:var(--font-mono);font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.ai-summary-label{font-family:var(--font-mono);font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 
 /* Deals */
 .deals-wrap{padding:12px 14px 0}
