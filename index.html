@@ -26,8 +26,8 @@
   --font-display:'Syne',sans-serif;
   --font-mono:'DM Mono',monospace;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-display);overflow:hidden}
-#app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;position:relative}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-display);overflow:hidden;font-size:15px}
+#app{display:flex;flex-direction:column;height:100vh;width:100%;max-width:430px;margin:0 auto;position:relative;background:var(--bg)}
 
 .header{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
 .header-logo{font-size:20px;font-weight:700;letter-spacing:-0.5px;color:var(--text)}
@@ -62,13 +62,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .key-status.set{background:rgba(77,255,184,0.1);color:var(--accent2);display:block}
 .key-status.unset{background:rgba(255,77,109,0.1);color:var(--red);display:block}
 
-/* News */
-.news-feed{padding:16px 20px 0}
-.feed-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.news-feed{padding:12px 14px 0}
+.feed-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .feed-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 .refresh-btn{font-family:var(--font-mono);font-size:10px;color:var(--accent);cursor:pointer;background:none;border:none;padding:4px 0}
 
-.news-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;transition:all 0.2s;position:relative;overflow:hidden}
 .news-card:active{transform:scale(0.98);background:var(--surface2)}
 .news-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
 .news-card.tag-deal::before{background:var(--accent)}
@@ -77,29 +76,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .news-card.tag-infra::before{background:var(--accent2)}
 .news-card.tag-market::before{background:#c084fc}
 
-.card-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.card-source{font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
-.card-date{font-family:var(--font-mono);font-size:10px;color:var(--muted)}
+.card-meta{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:nowrap;overflow:hidden}
+.card-source{font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+.card-date{font-family:var(--font-mono);font-size:9px;color:var(--muted);white-space:nowrap;flex-shrink:0}
 .card-dot{width:3px;height:3px;background:var(--border);border-radius:50%;flex-shrink:0}
-.card-tag{font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:20px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+.card-tag{font-family:var(--font-mono);font-size:9px;padding:2px 6px;border-radius:20px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
 .tag-deal .card-tag{background:rgba(232,255,71,0.12);color:var(--accent)}
 .tag-policy .card-tag{background:rgba(77,159,255,0.12);color:var(--blue)}
 .tag-power .card-tag{background:rgba(255,77,109,0.12);color:var(--red)}
 .tag-infra .card-tag{background:rgba(77,255,184,0.12);color:var(--accent2)}
 .tag-market .card-tag{background:rgba(192,132,252,0.12);color:#c084fc}
 
-.card-title{font-size:15px;font-weight:600;line-height:1.45;color:var(--text);margin-bottom:6px}
-.card-snippet{font-size:13px;line-height:1.6;color:var(--muted)}
+.card-title{font-size:14px;font-weight:600;line-height:1.4;color:var(--text);margin-bottom:5px}
+.card-snippet{font-size:12px;line-height:1.55;color:var(--muted)}
 .card-link{font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-top:6px;display:inline-block}
 
-.summarize-btn{display:flex;align-items:center;gap:6px;margin-top:12px;font-family:var(--font-mono);font-size:11px;color:var(--accent);background:rgba(232,255,71,0.08);border:1px solid rgba(232,255,71,0.2);border-radius:8px;padding:7px 12px;cursor:pointer;width:100%;justify-content:center;transition:all 0.2s}
+.summarize-btn{display:flex;align-items:center;gap:6px;margin-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--accent);background:rgba(232,255,71,0.07);border:1px solid rgba(232,255,71,0.15);border-radius:7px;padding:6px 10px;cursor:pointer;width:100%;justify-content:center;transition:all 0.2s}
 .summarize-btn:active{background:rgba(232,255,71,0.15)}
-.ai-summary{margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;line-height:1.65;color:var(--text);display:none}
+.ai-summary{margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--text);display:none}
 .ai-summary.visible{display:block}
-.ai-summary-label{font-family:var(--font-mono);font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.ai-summary-label{font-family:var(--font-mono);font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
 
 /* Deals */
-.deals-wrap{padding:16px 20px 0}
+.deals-wrap{padding:12px 14px 0}
 .metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .metric-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
 .metric-val{font-size:22px;font-weight:700;color:var(--text);font-family:var(--font-mono)}
@@ -128,7 +127,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .deal-detail{font-size:12px;color:var(--muted);line-height:1.55}
 
 /* Claude chat */
-.claude-wrap{padding:16px 20px 0;display:flex;flex-direction:column;height:calc(100vh - 115px)}
+.claude-wrap{padding:12px 14px 0;display:flex;flex-direction:column;height:calc(100vh - 115px)}
 .claude-msgs{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:12px}
 .claude-msgs::-webkit-scrollbar{display:none}
 .msg{margin-bottom:14px;max-width:88%}
